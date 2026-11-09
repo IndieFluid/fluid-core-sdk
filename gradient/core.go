@@ -16,6 +16,7 @@ type core struct {
 type Core interface {
 	UpdateRTTActual(sampleRTT time.Duration)
 	UpdateRTTNoload(currentRTT uint64)
+	Gradient() float64
 }
 
 func NewCore(alpha float64, actualRTT uint64) Core {
