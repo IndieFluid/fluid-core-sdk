@@ -6,7 +6,7 @@ import (
 )
 
 type core struct {
-	alpha         int
+	alpha         float64
 	actualRTT     uint64
 	actualNoLoad  uint64
 	lastTimeCheck int64
@@ -18,7 +18,7 @@ type Core interface {
 	UpdateRTTNoload(currentRTT uint64)
 }
 
-func NewCore(alpha int, actualRTT uint64) Core {
+func NewCore(alpha float64, actualRTT uint64) Core {
 	return &core{
 		alpha:     alpha,
 		actualRTT: actualRTT,
@@ -36,7 +36,7 @@ func (c *core) UpdateRTTActual(sampleRTT time.Duration) {
 		}
 
 		oldFloat := float64(oldVal)
-		newFloat := (float64(c.alpha) * sample) + ((1.0 - float64(c.alpha)) * oldFloat)
+		newFloat := (c.alpha * sample) + ((1.0 - c.alpha) * oldFloat)
 		newVal := uint64(newFloat)
 
 		if atomic.CompareAndSwapUint64(&c.actualRTT, oldVal, newVal) {
